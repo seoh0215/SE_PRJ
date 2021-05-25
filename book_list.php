@@ -93,6 +93,7 @@
 					<td><input type ="submit" value="검색"></td>
 
 				</tr>
+
 			</table>	
 		</form>
 		<h2>책 정보 출력</h2>

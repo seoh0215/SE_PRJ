@@ -134,9 +134,10 @@ else{
   }
 </script>
 <div style="border: 1px solid black; text-align: left;">
-          <b>배송 주소 확인</b><br>
+          <b>기본 배송 주소</b><br>
               <?php 
               $des_row=mysqli_fetch_array($des_query);
+
               echo "<table margin:3px;'><tr><td>";
               echo "이름: ".$des_row['name']."<br>".
           "배송지 주소: ".$des_row['address']." ".$des_row['detailAddr']."<br>".
@@ -144,9 +145,10 @@ else{
           "연락처: ".$des_row['phoneNum']."<br><br>";
           if(!$des_row){
               echo "<input type='button' name='des_select' value='배송지 등록' onclick='register()' >";
+              echo "<input type='button' name='des_select' value='기본 배송 주소 설정' onclick='move()' >";
           }
           else{
-            echo "<input type='button' name='des_select' value='배송지 선택' onclick='move()' >";
+            echo "<input type='button' name='des_select' value='기본 배송 주소 설정' onclick='move()' >";
           }
               echo "</tr></table>";
               ?>

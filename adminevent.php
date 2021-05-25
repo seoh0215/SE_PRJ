@@ -4,7 +4,7 @@
 
 	
 	$admin->content="
-	<iframe src='adminevent_form.php' style='width:100%; height:100vh' frameborder='0' crolling='no' frameborder='none' allowfullscreen=''></iframe>
+	수정중!!!!이 페이지 발견시 신고
 	";
 
 	$admin->AdminLayoutMain(); ?>

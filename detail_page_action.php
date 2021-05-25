@@ -26,12 +26,14 @@ if (isset($_GET['basket'])) {
   						$b_sql = "INSERT INTO basket(basketbook_index,basketbook_name,basketbook_author,basketbook_price,basketbook_amount,id,basketbook_num)
  						 VALUES (null,'$book_name','$author','$price','$basketbook_amount','$id','$book_num')"; //basketbook_image_num 컬럼 삭제 해서 지우고, id 컬럼 추가해서 넣음
  						 $current_id = mysqli_query($conn_basket, $b_sql) or die("<b>Error:</b>장바구니 에러!<br/>" . mysqli_error($conn_basket));
-}
+												}
   						
   						if (isset($current_id)) {
       							?><script>alert('장바구니 입력완료');
      				  			history.back();
-       								</script>}
+       								</script>
+       							
+       							
        						
 				
        <?php	

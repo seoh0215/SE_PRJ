@@ -1,6 +1,11 @@
 <?php
-    error_reporting(E_ALL);
-    ini_set( "display_errors", 1 );
+    //레이아웃
+include_once "adminLayout.inc";
+    $admin = new AdminLayout;
+
+    session_start();
+
+    //db
 	$connect =mysqli_connect('localhost','bitnami','1234','event') or die('connection fail');
     $number=$_GET['number'];
     $sql = "SELECT title,content,date,finalDate,hit FROM eventdb WHERE number=$number";
@@ -9,11 +14,24 @@
     $rows=mysqli_fetch_assoc($result);
 
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <?php $admin->AdminLayoutStyle();?>
+</head>
+<body>
+     <?php 
+    $admin->AdminLayoutHeader();
+    $admin->AdminLayoutMenu();
 
-<div  id="wrap">
-    <table>
+    $content=$rows['content'];
+    $str_content = str_replace("\r\n", "<br>", $content);
+  ?>
+<article><center>
+ <div  id="wrap">
+    <table  align = center  border=0 cellpadding=2 >
         <tr>
-            <td class="ontop">이벤트</td>
+            <td align= center bgcolor=#ccc><font color=white>이벤트</font></td>
         </tr>
 <table>
     <tr>
@@ -28,14 +46,20 @@
                 <td><?php echo  $rows['hit']?></td>
         </tr>
         <tr>
-            <td colspan="4"><?php echo $rows['content']?></td>
+            <td colspan="4"><?php echo $str_content?></td>
         </tr>
 </table>
 <div>
-                <button class="btn" onclick="history.back()" >목록으로</button>
+                <button class="btn" onclick="location.href='adminevent_list.php'" >목록으로</button>
                 <button onclick="location.href='./adminevent_modify.php?number=<?=$number?>'">수정</button>
  
                 <button onclick="location.href='./adminevent_delete.php?number=<?=$number?>'">삭제</button>
         </div>
         </table>
 </div>
+  </center></article>
+  <?php
+    $admin->AdminLayoutFooter();
+  ?>
+</body>
+</html>
