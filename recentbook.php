@@ -1,30 +1,124 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset = "utf-8">
-</head>
-<body>
+<?php 
 
-<div class="recentbook">
-<div style="background-color:#bbb; border:1px solid; padding:10px;">
-	<small>최신등록도서</small>
-	</div>
-	<div style="background-color:#dcdcdc; border:1px solid; padding:10px;">
-	<a href="mainPage.php"><img src="http://image.yes24.com/momo/TopCate1753/MidCate002/175215081.jpg" alt="My Image" width="100" height="130"></a>
+//책 이미지 가져오기 위함
+$conn_image = mysqli_connect("localhost","bitnami","1234","book") or die ("connection fail");
+$image_num = $_GET["image_num"];
+$image_sql = "SELECT * FROM upfile";
+$image_result = mysqli_query($conn_image, $image_sql);
 
-	<a href="login.php"><img src="http://image.yes24.com/momo/TopCate1261/MidCate008/126075397.jpg" alt="My Image" width="100" height="130"></a>
+//책 정보 가져오기 위함
+$conn_book =mysqli_connect("localhost","bitnami","1234","shoppingbasket") or die("connection fail"); 
+$basket_sql = "SELECT * FROM basket ORDER BY basketbook_index DESC";
+$basket_result = mysqli_query($conn_book, $basket_sql);
 
-	<a href="signUpForm.php"><img src="https://file.themusical.co.kr/fileStorage/ThemusicalAdmin/Play/Image/20141208042619J186J8JKARWB6U0L.jpg" alt="My Image" width="100" height="130"></a>
+$total_price = 0;
 
-	<a href="mainPage.php"><img src="https://an2-img.amz.wtchn.net/image/v1/watcha/image/upload/c_fill,h_400,q_80,w_280/v1497452820/rqcrmqnca72igjmczx5t.jpg" alt="My Image" width="100" height="130"></a>
+?>
+<HTML>
+<HEAD>
+	<meta charset = 'utf-8'/>
+	<link rel="stylesheet" type="text/css" href="basketstyle.css"/>
+</HEAD>
+<BODY>
 
-	<a href="login.php"><img src="http://image.yes24.com/momo/TopCate93/MidCate02/9210732.jpg" alt="My Image" width="100" height="130"></a>
+<div id="main_in">
+			<div id = "content">
+				<center><h1>장바구니</h1></center>
+				<?php
+				if(!$basket_result){
+					echo"장바구니가 비었습니다.";
+				} else{
+				?>
+				<table class = "list-table">
+				<thead>
+					<tr>
+						<!----상품정보에는 이미지, 책이름, 저자가 들어감-->
+						<th width = "300">상품 정보</th>
+						<th width = "150">상품 가격</th>
+						<!----수량 부분에 조절 아이콘 추가해야 함-->
+						<th width = "150">수량</th>
+						<!----총 금액에 계산 식 넣어야 함-->
+						<th width = "150">총 금액</th>
+						<!--삭제 부분에 삭제 아이콘 추가해야 함-->
+						<th width = "100">삭제</th>
+					</tr>
+				</thead>
 
-	<a href="signUpForm.php"><img src="http://image.yes24.com/goods/56918134/800x0" alt="My Image" width="100" height="130"></a>
+				<?php
+				while($bask = mysqli_fetch_array($basket_result)) {
+					echo '<tbody><tr>
+				  		<td width="200">
+			        	<div class="bak_item">';
+				    echo "<br>";
+				    echo '<div class="pro_name"><h3>'.$bask['basketbook_name'].'</h3></div>';
+				    echo "<br>";
+				    echo '<div class="pro_author">'.$bask['basketbook_author'].'</div>';
+				    echo '</div></td>';
+				
+				  	echo '<td width="150">'.$bask['basketbook_price']. '원</td>';
 
-	<a href="mainPage.php"><img src="https://i.pinimg.com/originals/16/0d/b1/160db178f006edcd2f811d4b7302b5e2.jpg" alt="My Image" width="100" height="130"></a>
+
+				  	echo '<td width="150">
+				  	<form method = "POST" action="re_amount.php">
+				  	<input type= "hidden" name="index" value="'.$bask['basketbook_index'].'">
+				  	<input id='.$bask['basketbook_index'].' type="text" name="result" value = "'.$bask['basketbook_amount'].'" size="3">';
+
+
+				  	echo '<input type="button" value=" + " onclick="count'.$bask['basketbook_index'].'(\'plus\');">
+				  		<input type="button" value=" - " onclick="count'.$bask['basketbook_index'].'(\'minus\');">
+				  		<br><br><input type="submit" value="수량 등록"></form></td>';
+
+				  	
+					echo '<script language="JavaScript">
+				  		function count'.$bask['basketbook_index'].'(type){';
+					echo "resultElement = document.getElementById(".$bask['basketbook_index'].");";
+					echo "	number = resultElement.value;
+
+				  			if(type == 'plus'){
+				  				number = parseInt(number)+1;
+				  			} else if(type == 'minus'){
+				  				if(number > 1) number = parseInt(number)-1;
+				  			}
+				  			resultElement.value = number;
+				  		}
+
+						</script>";
+						
+
+					echo '<td width="150">'.$bask['basketbook_amount']*$bask['basketbook_price'].'원</td>'; 
+
+				  	echo'<td width="100"><form name = "form" method = "post" action="deleteBasket.php"><input type= "hidden" name="index" value="'.$bask['basketbook_index'].'"><input type="submit" name="delete" value="삭제";></a></form></td>
+
+
+
+
+				  		</tr>
+						</tbody>';
+
+					$total_price += $bask['basketbook_amount']*$bask['basketbook_price'];
+		   			mysqli_close($connect);
+					}
+
+				?>
+	</table>
+	<?php
+	echo "<br>";
+	$final="총 주문금액: ";
+	echo "<font size=5>".$final;
+	echo $total_price;
+	$final_won=" 원";
+	echo "<font size=3>".$final_won;
+	?>
+	<a href="#"><button type="submit" style="background-color:rgb(51, 175, 233); border-color: rgb(51, 175, 233); height:70px; width:130px; "><h2>결제하기</h2></button></a>
+
+
 </div>
 </div>
+<footer></footer>
+<?php
+}
+?>
+</BODY>
+</HTML>
 
-</body>
-</html>
+

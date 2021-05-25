@@ -13,7 +13,7 @@
 
         if($query_res){
             echo "<script>
-                alert('정상적으로 수정되었습니다.');
+                
                 location.href='basket.php';
                 exit();
             </script>";
@@ -25,4 +25,6 @@
                 exit();
             </script>";
         }
+
+        #alert('정상적으로 수정되었습니다.');
 ?>

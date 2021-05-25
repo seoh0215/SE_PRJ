@@ -1,32 +1,36 @@
 <?php
 
-	include_once "./layout.inc";
+
+	include_once "adminLayout.inc";
+	$admin = new AdminLayout;
+
   	session_start();
- 	 $base = new layout;
-
-  	$base->link='./style.css';
 
 
-  	//데베
-	$connect =mysqli_connect('localhost','bitnami','1234','event') or die('connection fail');
-	 $today = date("Y-m-d");
-    $query = "SELECT * FROM eventdb WHERE finalDate >='$today' ORDER BY number DESC";
-    $result = $connect->query($query);
+  	//검색용 데베
+  	$connect =mysqli_connect('localhost','bitnami','1234','event') or die('connection fail');
+  	$date=$_POST['date'];
+  	$finalDate=$_POST['finalDate'];
+
+  	$date1 = date( 'Y-m-d', strtotime( $date ) );
+	$date2 = date( 'Y-m-d', strtotime( $finalDate) );
+
+	$query="SELECT * FROM eventdb WHERE date>= '$date1' AND finalDate<='$date2'	";
+	$result = $connect->query($query);
 	$total=mysqli_num_rows($result);
 ?>
+<!DOCTYPE html>
 <html>
 <head>
-	<?php $base->LayoutStyle();?>
+		<?php $admin->AdminLayoutStyle();?>
 </head>
 <body>
-	 <?php 
-    $base->LayoutHeader();
-    $base->LayoutMenu();
+	<?php 
+    $admin->AdminLayoutHeader();
+    $admin->AdminLayoutMenu();
   ?>
-  <article><center>
-
-<h2 align="center">진행중인 이벤트</h2>
-
+   <article><center>
+   	<h2 align="center"><?php echo "{$date1}부터 {$date2}"?>까지 기간검색</h2>
 <table>
 	<thead>
 		<tr>
@@ -62,8 +66,8 @@
 	</tbody>
 </table>
 </center></article>
-  <?php
-    $base->LayoutFooter();
+<?php
+    $admin->AdminLayoutFooter();
   ?>
 </body>
 </html>

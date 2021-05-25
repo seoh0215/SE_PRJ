@@ -1,6 +1,9 @@
 <?php           
+    include_once "adminLayout.inc";
+    $admin = new AdminLayout;
 
-
+    session_start();
+//데베
         $connect =mysqli_connect('localhost','bitnami','1234','event') or die('connection fail');
 
         $number = $_GET['number'];
@@ -15,7 +18,18 @@
         session_start();
  
 ?>
-        <form method = "post" action = "adminevent_modify_action.php" enctype="multipart/form-data">
+
+<html>
+<head>
+       <?php $admin->AdminLayoutStyle();?>
+</head>
+<body>
+ <?php 
+    $admin->AdminLayoutHeader();
+    $admin->AdminLayoutMenu();
+  ?>
+  <article><center>
+<form method = "post" action = "adminevent_modify_action.php" enctype="multipart/form-data">
         <table  align = center  border=0 cellpadding=2 >
                 <tr>
                         <td height=20 align= center bgcolor=#ccc><font color=white> 글수정</font></td>
@@ -39,7 +53,7 @@
                         </tr>
                         <tr>
                                 <td>이미지</td>
-                                <td><input type="file" name="userImage" value="미입력시 기존 파일 업로드" /></td>
+                                <td><input type="file" name="userImage" value="필수 업로드" /></td>
                         </tr>
                         </table>
  
@@ -50,4 +64,11 @@
                 </td>
                 </tr>
         </table>
+</center></article>
+   <?php
+    $admin->AdminLayoutFooter();
+  ?>
+</body>
+</html>
+        
         

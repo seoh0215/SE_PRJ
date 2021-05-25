@@ -27,9 +27,12 @@ $total_price = 0;
     $base->LayoutMenu();
  	?>
  <article><center>
-<div id="main_in">
+
+<!----<div id="main_in">----->
 			<div id = "content">
 				<center><h1>장바구니</h1></center>
+
+				<?php  ?>
 
 				<table class = "list-table">
 				<thead>
@@ -37,17 +40,15 @@ $total_price = 0;
 						<!----상품정보에는 이미지, 책이름, 저자가 들어감-->
 						<th width = "300">상품 정보</th>
 						<th width = "150">상품 가격</th>
-						<!----수량 부분에 조절 아이콘 추가해야 함-->
 						<th width = "150">수량</th>
-						<!----총 금액에 계산 식 넣어야 함-->
 						<th width = "150">총 금액</th>
-						<!--삭제 부분에 삭제 아이콘 추가해야 함-->
 						<th width = "100">삭제</th>
 					</tr>
 				</thead>
 
 				<?php
 				while($bask = mysqli_fetch_array($basket_result)) {
+
 					echo '<tbody><tr>
 				  		<td width="200">
 			        	<div class="bak_item">';
@@ -98,27 +99,54 @@ $total_price = 0;
 						</tbody>';
 
 					$total_price += $bask['basketbook_amount']*$bask['basketbook_price'];
-		   			mysqli_close($connect);
+					mysqli_close($connect);
+					
+		   			
 					}
+					
 
 				?>
 	</table>
 	<?php
-	echo "<br>";
+
+	if($total_price == 0){
+
+		echo "<br>";
+		echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+
+		echo "장바구니에 등록된 상품이 없습니다";
+		echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	    echo "<br>";
+	} else {
+
 	$final="총 주문금액: ";
 	echo "<font size=5>".$final;
 	echo $total_price;
 	$final_won=" 원";
 	echo "<font size=3>".$final_won;
+
+
+
 	?>
+
 	<a href="#"><button type="submit" style="background-color:rgb(51, 175, 233); border-color: rgb(51, 175, 233); height:70px; width:130px; "><h2>결제하기</h2></button></a>
 
+<?php }?>
 
 </div>
-</div>
+<!----</div>---->
 
 </center></article>
-</section>
+
 
 <?php
 $base->LayoutFooter();

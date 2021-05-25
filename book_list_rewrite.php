@@ -11,18 +11,12 @@
       $book_num = $_POST['rewrite_book_num'];
       $image_num = $_POST['rewrite_book_num'];
 
-    if (!$book_name || !$author || !$price || !$book_detail){
+    if (!$book_name || !$author || !$price || !$book_detail ||($_FILES['book_image']['error']>0)){
         echo "<script>
             alert('입력되지 않은 정보가 존재합니다.');
             location.href='book_list_upload.php';
             exit();
         </script>";
-                if($_FILES['book_image']['error']>0 ){
-                    echo "<script>alert('이미지 파일이 입력되지 않았습니다.');
-                    history.back();
-                    exit();
-                    </script>";
-                }
     }
 
     else{

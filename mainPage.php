@@ -9,7 +9,7 @@
     $conn =mysqli_connect("localhost","bitnami","1234","book") or die("connection fail");
     $image_num = $_GET["image_num"];
 
-    $sql = "SELECT image_num FROM upfile ORDER BY image_num DESC LIMIT 7"; 
+    $sql = "SELECT image_num FROM upfile ORDER BY image_num DESC LIMIT 5"; 
     $result = mysqli_query($conn, $sql);
 
 //첫번째 부분 추가 끝
@@ -72,7 +72,7 @@
 
   <div class="recentbook">
 <div style="background-color:rgb(51, 175, 233); border:1px solid; padding:10px;">
-  <small>최신등록도서</small>
+  <small><span style="color:#FFF"><b>최신등록도서</b></span></small>
   </div>
   <div style="background-color:#fff; border:1px solid; padding:10px;">
     <?php

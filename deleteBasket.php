@@ -14,7 +14,7 @@
 
         if($query_res){
             echo "<script>
-                alert('정상적으로 삭제되었습니다.');
+                alert('삭제되었습니다.');
                 location.href='basket.php';
                 exit();
             </script>";
@@ -26,4 +26,5 @@
                 exit();
             </script>";
         }
+
 ?>

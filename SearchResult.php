@@ -5,8 +5,59 @@
 	session_start();
 
 	$conn = mysqli_connect('localhost', 'bitnami', '1234', 'book') or die('fail');
-	$sql = "SELECT * FROM bookdata";
-	$sql_res = mysqli_query($conn, $sql);
+
+	$book_name = $_GET['book_name'];
+	$category = $_GET['category'];
+	$price1 = $_GET['price1'];
+	$price2 = $_GET['price2'];
+
+	if(empty($_REQUEST["book_name"])){ // 검색어가 empty 예외처리 
+		$book_name ="";
+	}
+	else{
+		$book_name =$_REQUEST["book_name"];
+	}
+
+	if($category == "all"){			//카테고리
+		if($price1 < $price2){		//가격
+			$max = $price2;
+			$min = $price1;
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND (book_name LIKE '%$book_name%') AND (price >=".$min." AND price <= ".$max.")";
+		}
+		else if ($price1 > $price2){
+			$max = $price1;
+			$min = $price2;
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND (book_name LIKE '%$book_name%') AND (price >= ".$min." AND price <=".$max.")";
+		}
+		else if ($price1 == $price2 && ($price1 != 0 && $price2 != 0)){
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND (book_name LIKE '%$book_name%') AND price = ".$price2."";
+		}
+		else{
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND book_name LIKE '%$book_name%'";
+		}
+
+	}
+	else{
+		if($price1 < $price2){		//가격
+			$max = $price2;
+			$min = $price1;
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND category = '$category' AND (book_name LIKE '%$book_name%') AND (price >=".$min." AND price <= ".$max.")";
+		}
+		else if ($price1 > $price2) {
+			$max = $price1;
+			$min = $price2;
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND category = '$category' AND (book_name LIKE '%$book_name%') AND (price >= ".$min." AND price <=".$max.")";
+		}
+		else if ($price1 == $price2 && ($price1 != 0 && $price2 != 0)){
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND category = '$category' AND (book_name LIKE '%$book_name%') AND price = ".$price2."";
+		}
+		else{
+			$sql = "SELECT * FROM bookdata WHERE is_delete = 0 AND category = '$category' AND book_name LIKE '%$book_name%'";
+		}
+			
+	}
+
+	$result = mysqli_query($conn, $sql);
 
 	$base->style = "
 		.infoBox{
@@ -31,12 +82,14 @@
 		$base->LayoutMenu();
 	?>
 	<article>
-		<p style="float: left;">검색결과-category, keyword</p>
+		<p style="float: left;">
+			<?php echo "'검색어: ".$book_name.', 카테고리: '.$category."' 검색결과"; ?>	
+
+		</p>
 		<?php
-			while($des_row = mysqli_fetch_array($sql_res)){
+			while($des_row = mysqli_fetch_array($result)){
 				echo "<table class='infoBox'><tr><td>";
-				echo "<a href='#' style='display: inline-block;'>img</a>".
-					"<a href='#'>".$des_row['book_name']."</a><br>".
+				echo "<a href='detail_page.php?book_num=".$des_row['book_num']."'>".$des_row['book_name']."</a><br>".
 					$des_row['category']."<br>".
 					$des_row['author']."<br>".
 					$des_row['price']."<br>";

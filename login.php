@@ -32,6 +32,7 @@
     $base->LayoutMenu();
  	?>
 			<article><center>
+
 				<h1> <p align=center>로그인</p> </h1>
 				<form method='post' action='userlogincheck.php'>
 				<table align=center border=0 cellspacing=0 width=500 bordercolordark=white bordercolorlight=#999999>
@@ -66,6 +67,7 @@
 				</tr>
 			</table>
 			</form>
+
 
 			</center></article>
 			</section>

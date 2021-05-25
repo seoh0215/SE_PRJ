@@ -26,11 +26,11 @@ extract($_REQUEST);
 			$sql = "INSERT INTO eventdb(number,title,content,date,finalDate,hit,imageType,imageData)VALUES (null,'$title','$content','$date','$finalDate',0,'{$imageProperties['mime']}', '{$imgData}')";
 
 
-			$current_id = mysqli_query($conn, $sql) or die("<b>Error:</b> Problem on Image Insert<br/>" . mysqli_error($conn));
+			$current_id = mysqli_query($conn, $sql) or die("<b>Error:</b> 이미지 에러!<br/>" . mysqli_error($conn));
 			if (isset($current_id)) {
 				?><script>
 			alert("<?php echo"이벤트 글 등록되었습니다."?>");
-			window.parent.location.href="adminevent_list.php"
+			 location.href="adminevent_list.php";
 				</script><?php
 		         
 		        }

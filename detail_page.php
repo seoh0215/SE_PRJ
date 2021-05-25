@@ -1,12 +1,16 @@
 <?php
 //레이아웃
+
   include_once "./layout.inc";
 
   session_start(); //예지가 추가함
   $base = new layout;
   $base->link='./style.css';
+  if(isset($_SESSION['id'])){
+  $login=TRUE;
+}
 
-  #$id = $_SESSION['id']; //예지가 추가함
+  $id = $_SESSION['id']; //예지가 추가함
   //
  $connect = mysqli_connect(
   'localhost',      //주소
@@ -31,26 +35,25 @@ $rows=mysqli_fetch_assoc($result);
     $iresult = mysqli_query($connect, $sql);
     $irows=mysqli_fetch_assoc($iresult);
 
-    //장바구니 함수
+    //배송 주소 확인!
+$conn=mysqli_connect('localhost','bitnami','1234','Destination') or die('fail');
+$des_sql = "SELECT * FROM desInfo WHERE id='$id' and orderDes=1;";
+$des_query = mysqli_query($conn, $des_sql);
 
-function basket(){
-  $basketbook_amount=$_GET['basketbook_amount'];
-  #$image_num=$_GET['image_num'];
-  $price=$_GET['price'];
-  $author=$_GET['author'];
-  $book_name=$_GET['book_name'];
-  $id = $_SESSION['id']; //예지가 추가함
+//장바구니 데이터
+$book_name=$rows['book_name'];
+$conn_book =mysqli_connect("localhost","bitnami","1234","shoppingbasket") or die("connection fail"); 
+$bsk_sql = "SELECT * FROM basket WHERE id='$id' and basketbook_num='$book_num'";
+$basket_result = mysqli_query($conn_book,$bsk_sql);
+$bask = mysqli_fetch_array($basket_result);
 
-  $conn_basket = mysqli_connect("localhost","bitnami","1234","shoppingbasket") or die("connection fail");
-  $b_sql = "INSERT INTO basket(basketbook_index,basketbook_name,basketbook_author,basketbook_price,basketbook_amount,id)
-  VALUES (null,'$book_name','$author','$price','$basketbook_amount','$id')"; //basketbook_image_num 컬럼 삭제 해서 지우고, id 컬럼 추가해서 넣음
-
-  $current_id = mysqli_query($conn_basket, $b_sql) or die("<b>Error:</b>장바구니 에러!<br/>" . mysqli_error($conn_basket));
-
+//
+if (!$bask['basketbook_amount']) {
+  $basketbook_amount=0;
 }
- if (array_key_exists('basket', $_GET)) {
-   basket();
- }
+else{
+  $basketbook_amount=$bask['basketbook_amount'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +69,7 @@ function basket(){
     $base->LayoutMenu();
   ?>
    <article><center>
-  <form method="get">
+  <form method="get" action="detail_page_action.php">
     <div class=mainbox>
 
         <div class="img_sec"  style="display: inline-block;">
@@ -102,31 +105,69 @@ function basket(){
             <tr>
               <th>구매수량</th>
               <td>
-                <input type="number" name="basketbook_amount" value="1">
+                <input type="number" name="basketbook_amount" value="1" min="1">
               </td>
+            </tr>
+            
+            <tr>
+              <th>장바구니 현황</th>
+              <td><?php echo $basketbook_amount,"개의 상품이 들어있습니다";?></td>
             </tr>
            
         </table>
         <br>
 
+<input type="hidden" name="id" value="<?php echo $id;?>">
+<input type="hidden" name="login" value="<?php echo $login;?>">
 <input type="hidden" name="image_num" value="<?php echo $irows["image_num"];?>">
 <input type="hidden" name="price" value="<?php echo $rows["price"];?>">
 <input type="hidden" name="author" value="<?php echo $rows['author'];?>">
 <input type="hidden" name="book_name" value="<?php echo $rows['book_name'];?>">
+<input type="hidden" name="book_num" value="<?php echo $book_num;?>">
 <script type="text/javascript">
-  function warning(){
-    alert("현재 구매하기 비활성!")
+  function move(){
+    location.href="destination_selection.php?id=<?php echo $id?>"
+  }
+  function register(){
+    alert("배송지 추가화면으로 이동합니다.");
+    location.href="myPageDest.php"
   }
 </script>
-        <input type ="button" value = "구매하기(비활성)" onclick="warning()"/> 
+<div style="border: 1px solid black; text-align: left;">
+          <b>기본 배송 주소</b><br>
+              <?php 
+              $des_row=mysqli_fetch_array($des_query);
+
+              echo "<table margin:3px;'><tr><td>";
+              echo "이름: ".$des_row['name']."<br>".
+          "배송지 주소: ".$des_row['address']." ".$des_row['detailAddr']."<br>".
+          "우편번호: ".$des_row['postcode']."<br>".
+          "연락처: ".$des_row['phoneNum']."<br><br>";
+          if(!$des_row){
+              echo "<input type='button' name='des_select' value='배송지 등록' onclick='register()' >";
+              echo "<input type='button' name='des_select' value='기본 배송 주소 설정' onclick='move()' >";
+          }
+          else{
+            echo "<input type='button' name='des_select' value='기본 배송 주소 설정' onclick='move()' >";
+          }
+              echo "</tr></table>";
+              ?>
+
+</div>
+        <input type ="submit" name="buy" value = "구매하기(비활성)"/> 
         <input type ="submit" name="basket" value = "장바구니"/>
         </div>
+        
         </div>
+
+</form>
+<div></div>
+
+
        
         <div>
-          <h3>상세페이지</h3>
+          <h3>상세 설명 </h3>
           <?php echo $str_content?></div>
-</form>
           </center></article>
   <?php
     $base->LayoutFooter();

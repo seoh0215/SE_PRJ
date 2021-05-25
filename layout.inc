@@ -39,25 +39,31 @@
 					<a href='mainPage.php'><img src='./img/sampleLogo.png' height='100' width='100'></a>
 					</h1>
 					<div style='display: inline-block;'>
-					<form>
-					<table id = 'search_box'>
-					<th>
-						<select id = 'category'>
-						<option>통합검색</option>
-						<option>국내도서</option>
-						<option>국외도서</option>
-						<option>중고도서</option>
-						</select>
-					</th>
-					<th>
-						<input id ='search_css' type='text' name='book_name'>
-					</th>
-					<th>
-						<input type='submit' value='검색'>
-					</th>
-					</table>
+
+					<form name = 'search_result' method='get' action = 'SearchResult.php'>
+						<table id = 'search_box'>
+							<th>
+								<select id = 'category' name ='category'>
+									<option value = 'all'>통합검색</option>
+									<option value = 'korea'>국내도서</option>
+									<option value = 'foreign'>국외도서</option>
+									<option value = 'used'>중고도서</option>
+								</select>
+							</th>
+							<th>
+								<input type='text' name='book_name' style='width:20em; height: 2em; border: none;'>
+							</th>
+							<th>
+								<input type='submit' value='검색'>
+							</th>
+						</table>
+							<details style ='font-size:14px' >
+								<summary style = 'color:rgb(51, 175, 233);'>가격지정</summary>
+									<input type='number' name='price1' min ='0' max = '1000000' > - <input type='number' name='price2' min ='0' max = '1000000'>
+							</details>
 					</form>
-					</div>";
+					</div>
+					";
 			if(!$_SESSION['id'] && !$_SESSION['name']){
 				echo "<h5 style='margin-top: 0;'><a href='login.php'>로그인 </a>|<a href='signUpForm.php'> 회원가입</a></h5>";
 			}
@@ -71,66 +77,12 @@
 		//menu 레이아웃
 		public function LayoutMenu(){
 			echo "<ul id = 'menu'>
-						<li onmouseover = 'DisplayMenu(1);' onmouseout = 'DisapearMenu(1);'><a href='#'>국내도서</a></li>
-							<ul id = 'subMenu1' style = 'display: none;' onmouseover = 'DisplayMenu(1);' onmouseout = 'DisapearMenu(1);'>
-								<li><a href='#'>총류</a></li>
-								<li><a href='#'>철학</a></li>
-								<li><a href='#'>종교</a></li>
-								<li><a href='#'>사회과학</a></li>
-								<li><a href='#'>자연과학</a></li>
-								<li><a href='#'>기술과학</a></li>
-								<li><a href='#'>예술</a></li>
-								<li><a href='#'>언어</a></li>
-								<li><a href='#'>문학</a></li>
-								<li><a href='#'>역사</a></li>
-							</ul>
-						<li onmouseover = 'DisplayMenu(2);' onmouseout = 'DisapearMenu(2);'><a href='#'>국외도서</a></li>
-							<ul id = 'subMenu2' style = 'display: none;' onmouseover = 'DisplayMenu(2);' onmouseout = 'DisapearMenu(2);'>
-								<li><a href='#'>총류</a></li>
-								<li><a href='#'>철학</a></li>
-								<li><a href='#'>종교</a></li>
-								<li><a href='#'>사회과학</a></li>
-								<li><a href='#'>자연과학</a></li>
-								<li><a href='#'>기술과학</a></li>
-								<li><a href='#'>예술</a></li>
-								<li><a href='#'>언어</a></li>
-								<li><a href='#'>문학</a></li>
-								<li><a href='#'>역사</a></li>
-							</ul>
-						<li><a href='#'>중고도서</a></li>
-						<li><a href='noticeListBoard.php'>공지/이벤트</a></li>
-					</ul>
-				<script>
-				function DisplayMenu(n){
-					if(n == 1){
-						var m = document.getElementById('subMenu1');
-					}
-					else if(n == 2){
-						var m = document.getElementById('subMenu2');
-					}
-            		if(m.style.display == 'none'){
-              			m.style.display = 'block';
-         			}
-         			else{
-                		m.style.display = 'none';
-           			}
-				}
-
-				function DisapearMenu(n){
-					if(n == 1){
-						var m = document.getElementById('subMenu1');
-					}
-					else if(n == 2){
-						var m = document.getElementById('subMenu2');
-					}
-            		if(m.style.display == 'block'){
-              			m.style.display = 'none';
-         			}
-         			else{
-                		m.style.display = 'block';
-           			}
-				}
-				</script>";
+						<li><a href='SearchResult.php?category=korea'>국내도서</a></li>
+						<li><a href='SearchResult.php?category=foreign'>국외도서</a></li>
+						<li><a href='SearchResult.php?category=used'>중고도서</a></li>
+						<li><a href='eventlist.php'>공지/이벤트</a></li>
+				</ul>
+				";
 		}
 		//content 레이아웃
 		public function LayoutContent(){
