@@ -4,7 +4,7 @@
 
 	$connect = mysqli_connect('localhost','bitnami','1234','event') or die('connection fail');
 
-	$page_list_size = 5;
+	$page_list_size = 1;
 
 	$page = $_GET['page'] ? $_GET['page'] : 0;
 	$offset = ($page) * $page_list_size;

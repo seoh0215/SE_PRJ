@@ -32,6 +32,7 @@
 			<div id = 'info_des'>
 				<ul>
 					<li><a href='myPageDest.php'>배송지 관리</a></li>
+					<li><a href='myPageOrder.php'>주문내역</a></li>
 				</ul>
 			</div>
 		</div>
