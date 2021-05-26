@@ -50,7 +50,7 @@
 				<tr>
 			<?php } ?>
 		<td><?php echo $total?></td>
-		<td><a href="admineventview.php?number=<?php echo $rows['number']?>"><?php echo $rows['title']?></td>
+		<td><a href="eventview.php?number=<?php echo $rows['number']?>"><?php echo $rows['title']?></td>
 		<td><?php echo $rows['date']?></td>
 		<td><?php echo $rows['finalDate']?></td>
 		<td><?php echo $rows['hit']?></td>
